@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IA ELEMENTAL | Catálogo de Plataformas de IA 2026</title>
+  <meta name="description" content="Información actualizada y comparativa interactiva de ChatGPT, Google Gemini, Microsoft Copilot, Canva Magic Studio y Dropbox Dash." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Animated Background Orbs -->
+  <div class="bg-glow-container">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="app-container nav-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">🤖</div>
+        <span>IA <span class="gradient-text">ELEMENTAL</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#plataformas" class="nav-link">Plataformas</a></li>
+        <li><a href="#comparativa" class="nav-link">Precios</a></li>
+        <li><a href="#recomendador" class="nav-link">Recomendador</a></li>
+      </ul>
+
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button id="theme-toggle-btn" class="btn btn-secondary btn-sm">☀️ Modo Claro</button>
+        <button onclick="openDeployModal()" class="btn btn-primary btn-sm">🚀 Publicar en Vercel</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main App Layout -->
+  <main class="app-container" style="padding-top: 3rem;">
+    <!-- Hero Section -->
+    <section style="text-align: center; margin-bottom: 3.5rem;">
+      <span class="badge badge-glow" style="margin-bottom: 1rem;">✨ Catálogo Interactivo Oficial 2026</span>
+      
+      <h1 style="font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.15; margin-bottom: 1.2rem;">
+        Descubre las Plataformas de <br /><span class="gradient-text">Inteligencia Artificial</span>
+      </h1>
+      
+      <p style={{ color: 'var(--text-secondary)' }} style="font-size: 1.1rem; max-width: 700px; margin: 0 auto 2.5rem auto; color: var(--text-secondary);">
+        Información detallada, funciones avanzadas y comparativa de precios de 
+        <strong style="color: var(--text-primary);"> ChatGPT, Google Gemini, Microsoft Copilot, Canva y Dropbox</strong>.
+      </p>
+
+      <!-- Real-time Search Input -->
+      <div style="max-width: 600px; margin: 0 auto 1.8rem auto;">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Buscar plataforma o función (ej. ChatGPT, imágenes, Excel, PDFs)..." 
+          style="width: 100%; padding: 0.85rem 1.4rem; border-radius: var(--radius-full); border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-size: 1rem; outline: none; box-shadow: var(--shadow-card);"
+        />
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem;">
+        <button onclick="setCategory('all')" data-category="all" class="cat-btn btn btn-primary btn-sm" style="border-radius: var(--radius-full);">Todas</button>
+        <button onclick="setCategory('conversational')" data-category="conversational" class="cat-btn btn btn-secondary btn-sm" style="border-radius: var(--radius-full);">Conversacionales</button>
+        <button onclick="setCategory('productivity')" data-category="productivity" class="cat-btn btn btn-secondary btn-sm" style="border-radius: var(--radius-full);">Productividad</button>
+        <button onclick="setCategory('design')" data-category="design" class="cat-btn btn btn-secondary btn-sm" style="border-radius: var(--radius-full);">Diseño & Arte</button>
+        <button onclick="setCategory('filesearch')" data-category="filesearch" class="cat-btn btn btn-secondary btn-sm" style="border-radius: var(--radius-full);">Búsqueda de Archivos</button>
+      </div>
+    </section>
+
+    <!-- Dynamic Grid of AI Platforms -->
+    <section id="plataformas" style="margin-bottom: 4rem;">
+      <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span>🤖</span> Plataformas de IA Destacadas
+      </h2>
+      
+      <div id="platforms-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+    </section>
+
+    <!-- Pricing Comparison Section -->
+    <section id="comparativa" style="margin-bottom: 4rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="badge badge-emerald" style="margin-bottom: 0.5rem;">📊 Comparativa Transparente</span>
+        <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Tabla de Precios e Información General</h2>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 1.5rem auto;">
+          Compara los costos mensuales y anuales de cada plataforma de un vistazo.
+        </p>
+
+        <div style="display: inline-flex; background: var(--bg-card); padding: 0.3rem; border-radius: var(--radius-full); border: 1px solid var(--border-color);">
+          <button id="btn-monthly" onclick="setBilling('monthly')" class="btn btn-primary btn-sm" style="border-radius: var(--radius-full);">Pago Mensual</button>
+          <button id="btn-annual" onclick="setBilling('annual')" class="btn btn-secondary btn-sm" style="border-radius: var(--radius-full);">Pago Anual (-20% Off)</button>
+        </div>
+      </div>
+
+      <div class="glass-card" style="overflow-x: auto; padding: 1rem;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 700px;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+              <th style="padding: 1rem; color: var(--text-primary);">Plataforma</th>
+              <th style="padding: 1rem; color: var(--text-primary);">Plan Gratuito</th>
+              <th style="padding: 1rem; color: var(--text-primary);">Plan Pro Individual</th>
+              <th style="padding: 1rem; color: var(--text-primary);">Plan Empresa</th>
+              <th style="padding: 1rem; color: var(--text-primary); text-align: right;">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="pricing-tbody">
+            <!-- Dynamically rendered via app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Quiz Recommender Section -->
+    <section id="recomendador" style="margin-bottom: 4rem;">
+      <div class="glass-card" style="padding: 2.5rem; border: 1px solid var(--border-glow);">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <span class="badge badge-glow" style="margin-bottom: 0.5rem;">💡 Quiz Interactivo</span>
+          <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">¿No sabes cuál elegir? Te ayudamos</h2>
+          <p style="color: var(--text-secondary);">Selecciona tu objetivo principal y te diremos cuál es tu mejor opción.</p>
+        </div>
+
+        <div style="max-width: 600px; margin: 0 auto;">
+          <button onclick="selectQuizOption('design', this)" class="quiz-opt-btn">🎨 Crear Diseños, Imágenes y Contenido Visual (Canva Magic Studio)</button>
+          <button onclick="selectQuizOption('office', this)" class="quiz-opt-btn">💼 Trabajar en Word, Excel, PowerPoint y Windows 11 (Microsoft Copilot)</button>
+          <button onclick="selectQuizOption('files', this)" class="quiz-opt-btn">📁 Buscar y Resumir Archivos en la Nube / PDFs (Dropbox Dash)</button>
+          <button onclick="selectQuizOption('multimodal', this)" class="quiz-opt-btn">🎥 Analizar Vídeos Largos y usar el ecosistema Google (Google Gemini)</button>
+          <button onclick="selectQuizOption('allround', this)" class="quiz-opt-btn">💬 Programación, Redacción General y Voz (OpenAI ChatGPT)</button>
+
+          <div style="text-align: center; margin-top: 1.5rem;">
+            <button onclick="runQuiz()" class="btn btn-primary">Obtener Mi Recomendación</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Detail Modal -->
+  <div id="platform-modal" class="modal-overlay" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closeModal()">✕</button>
+      <h2 id="modal-title" style="font-size: 1.8rem; margin-bottom: 0.3rem;"></h2>
+      <p id="modal-company" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.2rem;"></p>
+      <p id="modal-desc" style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;"></p>
+
+      <h4 style="margin-bottom: 0.8rem; color: var(--text-primary);">Planes y Tarifas</h4>
+      <div id="modal-plans" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;"></div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+        <button onclick="closeModal()" class="btn btn-secondary">Cerrar</button>
+        <a id="modal-cta" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Ir al Sitio Oficial ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deploy Modal -->
+  <div id="deploy-modal" class="modal-overlay" onclick="closeDeployModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closeDeployModal()">✕</button>
+      <h2 style="font-size: 1.6rem; margin-bottom: 1rem;">🚀 Despliegue en GitHub & Vercel</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 1rem;">Abre tu terminal en la carpeta del proyecto y ejecuta estos comandos para subirlo a tu GitHub:</p>
+
+      <pre style="background: #000; padding: 1.25rem; border-radius: 10px; color: #38bdf8; font-family: monospace; font-size: 0.9rem; margin-bottom: 1.5rem; overflow-x: auto;">
+git init
+git add .
+git commit -m "Initial commit - IA Elemental Web"
+git branch -M main
+git remote add origin https://github.com/TU-USUARIO/ia-elemental.git
+git push -u origin main
+      </pre>
+
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+        Luego ingresa a <strong>Vercel.com</strong>, inicia sesión con GitHub y haz clic en <strong>"Import Project"</strong>. ¡Vercel lo publicará gratis en segundos con enlace HTTPS!
+      </p>
+
+      <div style="text-align: right;">
+        <button onclick="closeDeployModal()" class="btn btn-primary">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Engine Script -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IA ELEMENTAL - Vista Previa Interactiva</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- React & ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <!-- Babel for JSX compilation in browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Premium Design Tokens */
+    :root {
+      --bg-main: #090d16;
+      --bg-card: rgba(18, 26, 43, 0.7);
+      --bg-card-hover: rgba(28, 39, 64, 0.85);
+      --bg-modal: rgba(13, 19, 32, 0.95);
+      --bg-glass: rgba(255, 255, 255, 0.04);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(99, 102, 241, 0.3);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --primary-accent: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.4);
+      --secondary-accent: #a855f7;
+      --emerald-accent: #10b981;
+      --cyan-accent: #06b6d4;
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --bg-card-hover: #ffffff;
+      --bg-modal: rgba(255, 255, 255, 0.98);
+      --bg-glass: rgba(0, 0, 0, 0.03);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font-body); background-color: var(--bg-main); color: var(--text-primary); line-height: 1.6; min-height: 100vh; }
+    .bg-glow-container { position: fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0; overflow:hidden; }
+    .glow-orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.25; animation: floatOrb 18s infinite alternate ease-in-out; }
+    .glow-orb-1 { top: -10%; left: 10%; width: 500px; height: 500px; background: radial-gradient(circle, var(--primary-accent), var(--secondary-accent)); }
+    .glow-orb-2 { bottom: 10%; right: 5%; width: 600px; height: 600px; background: radial-gradient(circle, #00c4cc, #4285f4); animation-delay: -6s; }
+    @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(60px, -40px) scale(1.1); } 100% { transform: translate(-40px, 60px) scale(0.9); } }
+
+    .app-container { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    .gradient-text { background: linear-gradient(135deg, #6366f1, #a855f7, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.4rem; font-size: 0.95rem; font-weight: 600; border-radius: var(--radius-md); border: 1px solid transparent; cursor: pointer; transition: var(--transition); text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent)); color: white; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35); }
+    .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .btn-secondary { background: var(--bg-card); border-color: var(--border-color); color: var(--text-primary); }
+    .btn-secondary:hover { border-color: var(--primary-accent); transform: translateY(-2px); }
+    .btn-sm { padding: 0.4rem 0.85rem; font-size: 0.85rem; border-radius: var(--radius-sm); }
+    
+    .badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .badge-glow { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    
+    .glass-card { background: var(--bg-card); backdrop-filter: blur(16px); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); transition: var(--transition); }
+    .glass-card:hover { border-color: var(--border-glow); }
+    
+    .navbar { position: sticky; top: 0; z-index: 100; background: rgba(9, 13, 22, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); padding: 1rem 0; }
+    .nav-container { display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-heading); font-weight: 800; font-size: 1.35rem; color: var(--text-primary); text-decoration: none; }
+    .logo-icon { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent)); display: flex; align-items: center; justify-content: center; color: white; }
+    
+    .modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index:1000; display:flex; align-items:center; justify-content:center; padding:1.5rem; }
+    .modal-content { background: var(--bg-modal); border: 1px solid var(--border-color); border-radius: var(--radius-lg); max-width: 780px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2rem; position: relative; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const aiPlatforms = [
+      {
+        id: "chatgpt",
+        name: "ChatGPT",
+        company: "OpenAI",
+        tagline: "El pionero en modelos de lenguaje multimodal y razonamiento avanzado.",
+        description: "ChatGPT es la plataforma líder mundial en inteligencia artificial generativa desarrollada por OpenAI, equipada con GPT-4o, GPT-o1, modo de voz avanzado y Canvas.",
+        rating: 4.9,
+        reviewsCount: "100M+",
+        badgeText: "Más Popular",
+        url: "https://chatgpt.com",
+        iconColor: "#10a37f",
+        priceStr: "$0 - $20 /mes",
+        features: ["Modelos GPT-4o y GPT-o1", "Modo de Voz Avanzado", "Generador de imágenes DALL-E 3", "Entorno Canvas interactivo"]
+      },
+      {
+        id: "gemini",
+        name: "Google Gemini",
+        company: "Google DeepMind",
+        tagline: "IA nativa multimodal de Google integrada con todo Workspace.",
+        description: "Gemini destaca por su gigantesca ventana de contexto (hasta 2 millones de tokens en Gemini 1.5 Pro) permitiendo procesar horas de vídeo, audios o libros enteros.",
+        rating: 4.8,
+        reviewsCount: "80M+",
+        badgeText: "Contexto 2M",
+        url: "https://gemini.google.com",
+        iconColor: "#4285f4",
+        priceStr: "$0 - $19.99 /mes",
+        features: ["Ventana de contexto ultra extendida", "Análisis nativo de vídeo y audio", "Integración con Gmail, Docs y Drive", "Gems personalizados"]
+      },
+      {
+        id: "microsoft-copilot",
+        name: "Microsoft Copilot",
+        company: "Microsoft",
+        tagline: "El compañero de IA integrado en Windows 11, Microsoft 365 y Edge.",
+        description: "Microsoft Copilot fusiona GPT-4o con el grafo de datos de Microsoft, estando nativamente integrado en Word, Excel, PowerPoint, Outlook y Teams.",
+        rating: 4.7,
+        reviewsCount: "90M+",
+        badgeText: "Productividad",
+        url: "https://copilot.microsoft.com",
+        iconColor: "#0078d4",
+        priceStr: "$0 - $20 /mes",
+        features: ["Integración nativa en Word, Excel y PPT", "Resumen de reuniones en Teams", "Creador de imágenes Designer", "Seguridad empresarial"]
+      },
+      {
+        id: "canva-magic",
+        name: "Canva Magic Studio",
+        company: "Canva",
+        tagline: "Suite completa de herramientas de IA para diseño, vídeo y creatividad visual.",
+        description: "Magic Studio reúne Magic Media (texto a imagen/vídeo), Magic Switch (rediseño de formatos en 1 clic) y retoque fotográfico inteligente.",
+        rating: 4.9,
+        reviewsCount: "65M+",
+        badgeText: "Diseño Top",
+        url: "https://www.canva.com/magic-studio/",
+        iconColor: "#00c4cc",
+        priceStr: "$0 - $14.99 /mes",
+        features: ["Magic Media (Imágenes & Vídeo)", "Magic Switch de formatos", "Eliminador de fondo en 1 clic", "Magic Write para copys"]
+      },
+      {
+        id: "dropbox-dash",
+        name: "Dropbox Dash & AI",
+        company: "Dropbox",
+        tagline: "Búsqueda universal con IA y asistente inteligente para tus archivos.",
+        description: "Dropbox Dash conecta todo tu contenido (Drive, Notion, Slack, Dropbox) en una sola barra de búsqueda capaz de responder preguntas sobre tus PDFs.",
+        rating: 4.6,
+        reviewsCount: "30M+",
+        badgeText: "Búsqueda IA",
+        url: "https://www.dropbox.com/dash",
+        iconColor: "#0061ff",
+        priceStr: "$0 - $18 /mes",
+        features: ["Búsqueda universal entre apps", "Preguntas y respuestas sobre PDFs", "Resumen de archivos extensos", "Organización inteligente Stacks"]
+      }
+    ];
+
+    function App() {
+      const [theme, setTheme] = React.useState('dark');
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [selectedPlatform, setSelectedPlatform] = React.useState(null);
+      const [showGuide, setShowGuide] = React.useState(false);
+
+      const toggleTheme = () => {
+        const next = theme === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        document.documentElement.setAttribute('data-theme', next);
+      };
+
+      const filtered = aiPlatforms.filter(p => 
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      return (
+        <div>
+          <div className="bg-glow-container">
+            <div className="glow-orb glow-orb-1"></div>
+            <div className="glow-orb glow-orb-2"></div>
+          </div>
+
+          <header className="navbar">
+            <div className="app-container nav-container">
+              <a href="#" className="logo">
+                <div className="logo-icon">🤖</div>
+                <span>IA <span className="gradient-text">ELEMENTAL</span></span>
+              </a>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <button onClick={toggleTheme} className="btn btn-secondary btn-sm">
+                  {theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
+                </button>
+                <button onClick={() => setShowGuide(true)} className="btn btn-primary btn-sm">
+                  🚀 Publicar en Vercel
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <main className="app-container" style={{ padding: '3rem 1.5rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <span className="badge badge-glow" style={{ marginBottom: '1rem' }}>✨ Catálogo Oficial 2026</span>
+              <h1 style={{ fontSize: '2.8rem', lineHeight: 1.2, marginBottom: '1rem' }}>
+                Explora las Mejores Plataformas de <br/><span className="gradient-text">Inteligencia Artificial</span>
+              </h1>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '650px', margin: '0 auto 2rem auto' }}>
+                ChatGPT, Google Gemini, Microsoft Copilot, Canva Magic Studio y Dropbox Dash en un solo lugar interactivo.
+              </p>
+
+              <div style={{ maxWidth: '550px', margin: '0 auto' }}>
+                <input 
+                  type="text" 
+                  placeholder="Buscar plataforma o característica (ej. ChatGPT, imágenes, Excel)..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.85rem 1.25rem',
+                    borderRadius: 'var(--radius-full)',
+                    border: '1px solid var(--border-color)',
+                    background: 'var(--bg-card)',
+                    color: 'var(--text-primary)',
+                    fontSize: '1rem',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
+              {filtered.map(platform => (
+                <div key={platform.id} className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                      <strong style={{ fontSize: '1.3rem', color: 'var(--text-primary)' }}>{platform.name}</strong>
+                      <span className="badge badge-emerald">{platform.badgeText}</span>
+                    </div>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '0.75rem' }}>por {platform.company} • ⭐ {platform.rating}</p>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '1.25rem' }}>{platform.tagline}</p>
+                    
+                    <div style={{ background: 'var(--bg-glass)', padding: '0.75rem', borderRadius: 'var(--radius-sm)', marginBottom: '1.25rem' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.4rem' }}>FUNCIONES CLAVE:</div>
+                      <ul style={{ listStyle: 'none', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        {platform.features.map((f, i) => <li key={i}>✓ {f}</li>)}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Precios desde:</span>
+                      <strong style={{ color: 'var(--emerald-accent)' }}>{platform.priceStr}</strong>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button onClick={() => setSelectedPlatform(platform)} className="btn btn-primary btn-sm" style={{ flex: 1 }}>Ver Detalles</button>
+                      <a href={platform.url} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">Sitio Web ↗</a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </main>
+
+          {selectedPlatform && (
+            <div className="modal-overlay" onClick={() => setSelectedPlatform(null)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem' }}>{selectedPlatform.name}</h2>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>Desarrollado por {selectedPlatform.company}</p>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', lineHeight: 1.7 }}>{selectedPlatform.description}</p>
+                
+                <h4 style={{ marginBottom: '0.5rem' }}>Rango de Precios</h4>
+                <p style={{ color: 'var(--emerald-accent)', fontWeight: 700, fontSize: '1.2rem', marginBottom: '1.5rem' }}>{selectedPlatform.priceStr}</p>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                  <button onClick={() => setSelectedPlatform(null)} className="btn btn-secondary">Cerrar</button>
+                  <a href={selectedPlatform.url} target="_blank" rel="noopener noreferrer" className="btn btn-primary">Ir al Sitio Oficial ↗</a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showGuide && (
+            <div className="modal-overlay" onClick={() => setShowGuide(false)}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>🚀 Despliegue en GitHub & Vercel</h2>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>Comandos para subir a tu GitHub:</p>
+                <pre style={{ background: '#000', padding: '1rem', borderRadius: '8px', color: '#38bdf8', fontSize: '0.85rem', marginBottom: '1.5rem', overflowX: 'auto' }}>
+git init{"\n"}
+git add .{"\n"}
+git commit -m "Initial commit - IA Elemental"{"\n"}
+git branch -M main{"\n"}
+git remote add origin https://github.com/TU-USUARIO/ia-elemental.git{"\n"}
+git push -u origin main
+                </pre>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>Luego entra a <strong>Vercel.com</strong>, conecta tu GitHub e importa este repositorio para publicarlo gratis en 1 clic.</p>
+                <button onClick={() => setShowGuide(false)} className="btn btn-primary">Entendido</button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
